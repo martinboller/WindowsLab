@@ -1,5 +1,6 @@
 # Windows Lab
 This lab is based on a 2017 version of Chris Longs Detection Lab - As I have messed it up a lot for specific testing purposes over a period of time while Chris has developed further on DetectionLab, this is here for other test purposes.
+If you use this, please consider supporting Chris https://github.com/sponsors/clong
 
 ## Purpose
 Testing Windows.
