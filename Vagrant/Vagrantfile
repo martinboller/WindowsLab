@@ -33,8 +33,8 @@ Vagrant.configure("2") do |config|
     cfg.vm.provision "shell", path: "scripts/install-autorunstowineventlog.ps1", privileged: false
     cfg.vm.provision "shell", path: "scripts/configure-AuditingPolicyGPOs.ps1", privileged: false
     cfg.vm.provision "shell", inline: "Set-SmbServerConfiguration -AuditSmb1Access $true -Force", privileged: false
-    cfg.vm.provision "shell", path: "scripts/install-CA.ps1", privileged: false
     cfg.vm.provision "shell", path: "scripts/configure-CA-gpo.ps1", privileged: false
+    cfg.vm.provision "shell", path: "scripts/install-CA.ps1", privileged: false
     cfg.vm.provision "shell", path: "scripts/set-ntp.cmd", privileged: false
     cfg.vm.provision "reload"
   
