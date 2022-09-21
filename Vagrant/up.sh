@@ -1,13 +1,12 @@
 #!/bin/sh
 
-# This scripts delays the UP'ing of the boxes
-
-#sleep 10
+# This scripts brings the boxes up, adding a little wait between them to get DNS, AD etc all synced up
 vagrant up dc1
 sleep 30
-vagrant up dc2
 vagrant up wef
-sleep 10
+sleep 30
+vagrant up dc2
+sleep 30
 vagrant up win10a
-sleep 10
+sleep 30
 vagrant up win10b

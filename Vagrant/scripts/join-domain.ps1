@@ -5,7 +5,7 @@ $domain= "siemlab.dk"
 
 Write-Host 'Join the domain'
 $hostname = $(hostname)
-$user = "AD\vagrant"
+$user = "vagrant@siemlab.dk"
 $pass = ConvertTo-SecureString "vagrant" -AsPlainText -Force
 $DomainCred = New-Object System.Management.Automation.PSCredential $user, $pass
 

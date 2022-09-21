@@ -25,8 +25,8 @@ if ((gwmi win32_computersystem).partofdomain -eq $false) {
     -DatabasePath "C:\Windows\NTDS" `
     -DomainMode "Win2012" `
     -DomainName "windomain.local" `
-    -DomainNetbiosName "WINDOMAIN" `
-    -ForestMode "Win2012" `
+    -DomainNetbiosName "SIEMLAB" `
+    -ForestMode "7" `
     -InstallDns:$true `
     -LogPath "C:\Windows\NTDS" `
     -NoRebootOnCompletion:$true `
