@@ -2,8 +2,10 @@
 This lab is based on a 2017 version of Chris Longs Detection Lab - As I have messed it up a lot for specific testing purposes over a period of time while Chris has developed further on DetectionLab, this is here for other test purposes.
 If you use this, please consider supporting Chris https://github.com/sponsors/clong
 
+Scripts and files for preloading OUs, Users, and Groups shamelessly lifted from https://activedirectorypro.com/create-active-directory-test-environment/#lesson-4
+
 ## Purpose
-Testing Windows.
+Testing & Hacking Windows.
 
 ## Known Issues
 - Running Virtualbox on Debian, so this is what is tested here.
