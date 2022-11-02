@@ -8,4 +8,4 @@ Import-GPO -BackupGpoName $GPOName -Path "c:\vagrant\resources\GPO\Cert-Enroll" 
 # Link to Domain
 New-GPLink -Name $GPOName -Target $OU -Enforced yes
 
-gpupdate /force
+Invoke-GPUpdate -Force

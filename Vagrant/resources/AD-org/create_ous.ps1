@@ -1,6 +1,7 @@
 # This script is used for creating bulk OUs from a CSV file
 # Update the CSV with the OU name and path
 # website: activedirectorypro.com
+$ErrorActionPreference = 'SilentlyContinue' 
 
 # Import active directory module for running AD cmdlets
 Import-Module activedirectory

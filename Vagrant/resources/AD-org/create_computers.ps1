@@ -1,6 +1,7 @@
 # This script is used for creating bulk Computers from a CSV file
 # Update the CSV with the Computer name and other information
 
+$ErrorActionPreference = 'SilentlyContinue' 
 # Import active directory module for running AD cmdlets
 Import-Module activedirectory
   

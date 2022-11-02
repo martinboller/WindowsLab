@@ -1,4 +1,5 @@
 # website: activedirectorypro.com
+$ErrorActionPreference = 'SilentlyContinue' 
 
 Import-Module ActiveDirectory
 

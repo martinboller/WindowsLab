@@ -14,9 +14,9 @@ Vagrant.configure("2") do |config|
     cfg.vm.boot_timeout = 480
     cfg.vm.communicator = "winrm"
     cfg.winrm.timeout = 240
-    cfg.winrm.retry_limit = 10
-    cfg.vm.network :private_network, ip: "192.168.56.41", dns: "192.168.56.41", gateway: "192.168.10.1"
-    cfg.vm.network :public_network, ip: "192.168.10.41", dns: "192.168.10.1", gateway: "192.168.10.1", bridge: "enp1s0", auto_config: true
+    cfg.winrm.retry_limit = 20
+    cfg.vm.network :private_network, ip: "192.168.56.41", dns: "192.168.56.41"#, gateway: "192.168.10.1"
+    cfg.vm.network :public_network, ip: "192.168.10.41", dns: "192.168.10.41", gateway: "192.168.10.1", bridge: "enp1s0", auto_config: true
 
     cfg.vm.provision "shell", path: "scripts/fix-second-network.ps1", privileged: false, args: "192.168.56.41"
     cfg.vm.provision "shell", path: "scripts/provision.ps1", privileged: false
@@ -24,6 +24,7 @@ Vagrant.configure("2") do |config|
     cfg.vm.provision "shell", path: "scripts/provision.ps1", privileged: false
     cfg.vm.provision "reload"
     cfg.vm.provision "shell", path: "scripts/add-NS-records.ps1", privileged: false
+    cfg.vm.provision "shell", path: "scripts/install-CA.ps1", privileged: false
     cfg.vm.provision "shell", path: "scripts/download_palantir_wef.ps1", privileged: false
     cfg.vm.provision "shell", path: "scripts/download_palantir_osquery.ps1", privileged: false
     cfg.vm.provision "shell", path: "scripts/install-sysinternals.ps1", privileged: false
@@ -34,13 +35,13 @@ Vagrant.configure("2") do |config|
     cfg.vm.provision "shell", path: "scripts/configure-AuditingPolicyGPOs.ps1", privileged: false
     cfg.vm.provision "shell", inline: "Set-SmbServerConfiguration -AuditSmb1Access $true -Force", privileged: false
     cfg.vm.provision "shell", path: "scripts/configure-CA-gpo.ps1", privileged: false
-    cfg.vm.provision "shell", path: "scripts/install-CA.ps1", privileged: false
+  #  cfg.vm.provision "shell", path: "scripts/install-CA.ps1", privileged: false
     cfg.vm.provision "shell", path: "scripts/set-ntp.cmd", privileged: false
-    cfg.vm.provision "reload"
     cfg.vm.provision "shell", path: "resources/AD-org/create_ous.ps1", privileged: false
     cfg.vm.provision "shell", path: "resources/AD-org/create_groups.ps1", privileged: false
     cfg.vm.provision "shell", path: "resources/AD-org/create_users.ps1", privileged: false
     cfg.vm.provision "shell", path: "resources/AD-org/create_computers.ps1", privileged: false
+    cfg.vm.provision "reload"
   
     cfg.vm.provider "vmware_fusion" do |v, override|
       override.vm.box = "../Boxes/windows_2022_vmware.box"
@@ -74,9 +75,9 @@ Vagrant.configure("2") do |config|
     cfg.vm.boot_timeout = 480
     cfg.vm.communicator = "winrm"
     cfg.winrm.timeout = 240
-    cfg.winrm.retry_limit = 10
-    cfg.vm.network :private_network, ip: "192.168.56.42", dns: "192.168.56.41", gateway: "192.168.10.1"
-    cfg.vm.network :public_network, ip: "192.168.10.42", dns: "192.168.10.1", gateway: "192.168.10.1", bridge: "enp1s0", auto_config: true
+    cfg.winrm.retry_limit = 20
+    cfg.vm.network :private_network, ip: "192.168.56.42", dns: "192.168.56.41"# , gateway: "192.168.10.1"
+    cfg.vm.network :public_network, ip: "192.168.10.42", dns: "192.168.10.41", gateway: "192.168.10.1", bridge: "enp1s0", auto_config: true
 
     cfg.vm.provision "shell", path: "scripts/fix-second-network.ps1", privileged: false, args: "192.168.56.42"
     cfg.vm.provision "shell", path: "scripts/provision.ps1", privileged: true
@@ -110,9 +111,9 @@ Vagrant.configure("2") do |config|
     cfg.vm.boot_timeout = 480
     cfg.vm.communicator = "winrm"
     cfg.winrm.timeout = 240
-    cfg.winrm.retry_limit = 10
-    cfg.vm.network :private_network, ip: "192.168.56.43", dns: "192.168.56.41", gateway: "192.168.10.1"
-    cfg.vm.network :public_network, ip: "192.168.10.43", dns: "192.168.10.1", gateway: "192.168.10.1", bridge: "enp1s0", auto_config: true
+    cfg.winrm.retry_limit = 20
+    cfg.vm.network :private_network, ip: "192.168.56.43", dns: "192.168.56.41" #, gateway: "192.168.10.1"
+    cfg.vm.network :public_network, ip: "192.168.10.43", dns: "192.168.10.41", gateway: "192.168.10.1", bridge: "enp1s0", auto_config: true
 
     cfg.vm.provision "shell", path: "scripts/fix-second-network.ps1", privileged: false, args: "-ip 192.168.56.43 -dns 192.168.56.41"
     cfg.vm.provision "shell", path: "scripts/provision.ps1", privileged: false
@@ -158,10 +159,10 @@ Vagrant.configure("2") do |config|
     cfg.vm.boot_timeout = 600
     cfg.vm.communicator = "winrm"
     cfg.winrm.timeout = 300
-    cfg.winrm.retry_limit = 10
+    cfg.winrm.retry_limit = 20
 
-    cfg.vm.network :private_network, ip: "192.168.56.44", dns: "192.168.56.41", gateway: "192.168.10.1"
-    cfg.vm.network :public_network, ip: "192.168.10.44", dns: "192.168.10.1", gateway: "192.168.10.1", bridge: "enp1s0", auto_config: true
+    cfg.vm.network :private_network, ip: "192.168.56.44", dns: "192.168.56.41" #, gateway: "192.168.10.1"
+    cfg.vm.network :public_network, ip: "192.168.10.44", dns: "192.168.10.41", gateway: "192.168.10.1", bridge: "enp1s0", auto_config: true
 
     cfg.vm.provision "shell", path: "scripts/fix-second-network.ps1", privileged: false, args: "-ip 192.168.56.44 -dns 192.168.56.41"
     cfg.vm.provision "shell", path: "scripts/provision.ps1", privileged: false
@@ -206,7 +207,7 @@ Vagrant.configure("2") do |config|
     cfg.vm.boot_timeout = 600
     cfg.vm.communicator = "winrm"
     cfg.winrm.timeout = 300
-    cfg.winrm.retry_limit = 10
+    cfg.winrm.retry_limit = 20
 
     cfg.vm.network :private_network, ip: "192.168.56.45", dns: "192.168.56.41", gateway: "192.168.10.1"
     cfg.vm.network :public_network, ip: "192.168.10.45", dns: "192.168.10.1", gateway: "192.168.10.1", bridge: "enp1s0", auto_config: true
@@ -254,7 +255,7 @@ Vagrant.configure("2") do |config|
     cfg.vm.boot_timeout = 480
     cfg.vm.communicator = "winrm"
     cfg.winrm.timeout = 240
-    cfg.winrm.retry_limit = 10
+    cfg.winrm.retry_limit = 20
 
     cfg.vm.network :private_network, ip: "192.168.56.46", dns: "192.168.56.41", gateway: "192.168.10.1"
     cfg.vm.network :public_network, ip: "192.168.10.46", dns: "192.168.10.1", gateway: "192.168.10.1", bridge: "enp1s0", auto_config: false

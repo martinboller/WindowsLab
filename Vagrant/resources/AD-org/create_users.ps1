@@ -1,7 +1,8 @@
 #Import active directory module for running AD cmdlets
 #Author: Robert Allen
-#Website: activedirectrypro.com
+#Website: activedirectorypro.com
 
+$ErrorActionPreference = 'SilentlyContinue' 
 Import-Module activedirectory
 
 #Store the data from ADUsers.csv in the $ADUsers variable
