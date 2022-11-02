@@ -27,6 +27,7 @@ foreach ($computer in $ADComputers)
 			-OperatingSystemHotFix $OperatingSystemHotFix `
 			-OperatingSystemServicePack	$OperatingSystemServicePack `
 			-OperatingSystemVersion $OperatingSystemVersion `
+			-DNSHostName $dnshostname `
 			-location $location `
 			-Path $Path `
 
