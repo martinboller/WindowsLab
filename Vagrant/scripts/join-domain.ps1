@@ -5,7 +5,7 @@ $domain= "siemlab.dk"
 
 Write-Host 'Join the domain'
 $hostname = $(hostname)
-$user = "vagrant@siemlab.dk"
+$user = "SIEMLAB\vagrant"
 $pass = ConvertTo-SecureString "vagrant" -AsPlainText -Force
 $DomainCred = New-Object System.Management.Automation.PSCredential $user, $pass
 
@@ -15,7 +15,7 @@ If ($hostname -eq "wef") {
 } ElseIf ($hostname -eq "win10a") {
   Write-Host "Adding Win10a to the domain. Sometimes this step times out. If that happens, just run 'vagrant reload win10a --provision'" #debug
   Add-Computer -DomainName "siemlab.dk" -credential $DomainCred -OUPath "ou=Workstations,DC=siemlab,dc=dk"
-} ElseIf ($hostname -eq "win10a") {
+} ElseIf ($hostname -eq "win10b") {
   Write-Host "Adding Win10b to the domain. Sometimes this step times out. If that happens, just run 'vagrant reload win10b --provision'" #debug
   Add-Computer -DomainName "siemlab.dk" -credential $DomainCred -OUPath "ou=Jumpstations,DC=siemlab,dc=dk"
 } Else {
@@ -26,9 +26,9 @@ Set-ItemProperty "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon" -
 Set-ItemProperty "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon" -Name DefaultUserName -Value "vagrant"
 Set-ItemProperty "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon" -Name DefaultPassword -Value "vagrant"
 
-# Stop Windows Update
+# Ensure that Windows Update starts
 #Write-Host "Disabling Windows Updates and Windows Module Services"
-#Set-Service wuauserv -StartupType Disabled
-#Stop-Service wuauserv
-#Set-Service TrustedInstaller -StartupType Disabled
-#Stop-Service TrustedInstaller
+Set-Service wuauserv -StartupType Enabled
+Start-Service wuauserv
+Set-Service TrustedInstaller -StartupType Enabled
+Start-Service TrustedInstaller

@@ -23,7 +23,7 @@ if ($env:COMPUTERNAME -imatch 'vagrant') {
 
   # Set DNS Servers
   Write-Host 'Set DNS Servers'
-  $newDNSServers = "192.168.10.1", "192.168.56.41", "192.168.56.42"
+  $newDNSServers = "192.168.10.1", "192.168.10.41", "192.168.10.42"
   $adapters = Get-WmiObject Win32_NetworkAdapterConfiguration | Where-Object { $_.IPAddress -And ($_.IPAddress).StartsWith($subnet) }
   if ($adapters) {
     Write-Host Setting DNS
@@ -37,10 +37,10 @@ if ($env:COMPUTERNAME -imatch 'vagrant') {
 
   if ($env:COMPUTERNAME -imatch 'dc1') {
     Write-Host 'Install DC1 and create Domain'
-    . c:\vagrant\scripts\create-domain.ps1 192.168.56.41
+    . c:\vagrant\scripts\create-domain.ps1 192.168.10.41
   } elseif ($env:COMPUTERNAME -imatch 'dc2') {
     Write-Host 'Install DC2'
-    . c:\vagrant\scripts\add-domaincontroller.ps1 192.168.56.42
+    . c:\vagrant\scripts\add-domaincontroller.ps1 192.168.10.42
   } else {
     . c:\vagrant\scripts\join-domain.ps1
   }

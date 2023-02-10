@@ -48,7 +48,7 @@ if ((gwmi win32_computersystem).partofdomain -eq $false) {
     -SysvolPath "C:\Windows\SYSVOL" `
     -Force:$true  
 
-  $newDNSServers = "192.168.56.41", "192.168.56.42"
+  $newDNSServers = "192.168.10.41", "192.168.10.42"
   $adapters = Get-WmiObject Win32_NetworkAdapterConfiguration | Where-Object { $_.IPAddress -And ($_.IPAddress).StartsWith($subnet) }
   if ($adapters) {
     Write-Host Setting DNS
@@ -59,10 +59,10 @@ if ((gwmi win32_computersystem).partofdomain -eq $false) {
   Sync-DnsServerZone -passThru
   
   # Write-Host "Excluding NAT interface from DNS"
-  # $nics=Get-WmiObject "Win32_NetworkAdapterConfiguration where IPEnabled='TRUE'" |? { $_.IPAddress[0] -ilike "192.168.56.*" }
+  # $nics=Get-WmiObject "Win32_NetworkAdapterConfiguration where IPEnabled='TRUE'" |? { $_.IPAddress[0] -ilike "192.168.10.*" }
   # $dnslistenip=$nics.IPAddress
   # $dnslistenip
-  # #dnscmd /ResetListenAddresses  $dnslistenip "192.168.56.42"
+  # #dnscmd /ResetListenAddresses  $dnslistenip "192.168.10.42"
 
   $nics=Get-WmiObject "Win32_NetworkAdapterConfiguration where IPEnabled='TRUE'" |? { $_.IPAddress[0] -ilike "10.*" }
     foreach($nic in $nics)

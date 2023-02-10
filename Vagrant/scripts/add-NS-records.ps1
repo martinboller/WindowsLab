@@ -7,23 +7,18 @@ if ($env:COMPUTERNAME -imatch 'dc1') {
    Add-DnsServerResourceRecordA `
       -Name win10a `
       -ZoneName $domain `
-      -IPv4Address 192.168.56.44
+      -IPv4Address 192.168.10.44
       Add-DnsServerResourceRecordA `
       -Name win10a `
       -ZoneName $domain `
-      -IPv4Address 192.168.56.45
+      -IPv4Address 192.168.10.45
       Add-DnsServerResourceRecordA `
       -Name win11 `
       -ZoneName $domain `
-      -IPv4Address 192.168.56.46
+      -IPv4Address 192.168.10.46
 
    Write-Host 'A and NS records for dc2'
    Add-DnsServerResourceRecordA `
-      -Name dc2 `
-      -ZoneName $domain `
-      -IPv4Address 192.168.56.42
-
-   Add-DnsServerResourceRecordA  `
       -Name dc2 `
       -ZoneName $domain `
       -IPv4Address 192.168.10.42
@@ -65,3 +60,5 @@ if ($env:COMPUTERNAME -imatch 'dc1') {
 }
 
 Write-Host 'Finished adding/modifying A, NS, and SOA'
+
+exit 0

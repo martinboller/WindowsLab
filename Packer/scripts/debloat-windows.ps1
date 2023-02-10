@@ -20,8 +20,8 @@ if ($env:PACKER_BUILDER_TYPE -And $($env:PACKER_BUILDER_TYPE).startsWith("hyperv
   # Optimize Windows Update
   Write-host Optimize Windows Update
   . $env:TEMP\Debloat-Windows-10-master\scripts\optimize-windows-update.ps1
-  Write-host Disable Windows Update
-  Set-Service wuauserv -StartupType Disabled
+  #Write-host Disable Windows Update
+  #Set-Service wuauserv -StartupType Disabled
 
   # Turn off shutdown event tracking
   if ( -Not (Test-Path 'registry::HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Reliability'))
