@@ -106,12 +106,6 @@
       "type": "windows-shell"
     },
     {
-      "scripts": [
-        "./scripts/debloat-windows.ps1"
-      ],
-      "type": "powershell"
-    },
-    {
       "type": "windows-restart"
     },
     {
@@ -127,8 +121,7 @@
       "scripts": [
         "./scripts/pin-powershell.bat",
         "./scripts/compile-dotnet-assemblies.bat",
-        "./scripts/set-winrm-automatic.bat",
-        "./scripts/dis-updates.bat"
+        "./scripts/set-winrm-automatic.bat"
       ],
       "type": "windows-shell"
     }

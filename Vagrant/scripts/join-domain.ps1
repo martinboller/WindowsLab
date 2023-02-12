@@ -27,8 +27,8 @@ Set-ItemProperty "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon" -
 Set-ItemProperty "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon" -Name DefaultPassword -Value "vagrant"
 
 # Ensure that Windows Update starts
-#Write-Host "Disabling Windows Updates and Windows Module Services"
-Set-Service wuauserv -StartupType Enabled
-Start-Service wuauserv
-Set-Service TrustedInstaller -StartupType Enabled
-Start-Service TrustedInstaller
+#Write-Host "Enabling Windows Updates and Windows Module Services"
+#et-Service wuauserv -StartupType Enabled
+#Start-Service wuauserv
+#Set-Service TrustedInstaller -StartupType Enabled
+#Start-Service TrustedInstaller

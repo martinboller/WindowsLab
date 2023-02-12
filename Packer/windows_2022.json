@@ -128,12 +128,6 @@
       "type": "windows-shell"
     },
     {
-      "scripts": [
-        "./scripts/debloat-windows.ps1"
-      ],
-      "type": "powershell"
-    },
-    {
       "type": "windows-restart"
     },
     {
