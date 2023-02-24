@@ -12,28 +12,14 @@ if ($env:COMPUTERNAME -imatch 'vagrant') {
 
   Write-Host 'Hostname is still the original one, skip provisioning for reboot'
 
-  Write-Host 'Install bginfo'
-  . c:\vagrant\scripts\install-bginfo.ps1
+  #Write-Host 'Install bginfo'
+  #. c:\vagrant\scripts\install-bginfo.ps1
 
   Write-Host -fore red 'Hint: vagrant reload' $box '--provision'
 
 } elseif ((gwmi win32_computersystem).partofdomain -eq $false) {
 
   Write-Host -fore red "Current domain is set to 'workgroup'. Time to join the domain!"
-
-  # Set DNS Servers
-  Write-Host 'Set DNS Servers'
-  $newDNSServers = "192.168.10.1", "192.168.10.41", "192.168.10.42"
-  $adapters = Get-WmiObject Win32_NetworkAdapterConfiguration | Where-Object { $_.IPAddress -And ($_.IPAddress).StartsWith($subnet) }
-  if ($adapters) {
-    Write-Host Setting DNS
-    $adapters | ForEach-Object {$_.SetDNSServerSearchOrder($newDNSServers)}
-  }
-
-  if (!(Test-Path 'c:\Program Files\sysinternals\bginfo.exe')) {
-    Write-Host 'Install bginfo'
-    . c:\vagrant\scripts\install-bginfo.ps1
-  }
 
   if ($env:COMPUTERNAME -imatch 'dc1') {
     Write-Host 'Install DC1 and create Domain'
@@ -49,9 +35,6 @@ if ($env:COMPUTERNAME -imatch 'vagrant') {
 } else {
 
   Write-Host -fore green "I am domain joined!"
+  . C:\vagrant\scripts\fix-defaultgw.ps1
 
-  if (!(Test-Path 'c:\Program Files\sysinternals\bginfo.exe')) {
-    Write-Host 'Install bginfo'
-    . c:\vagrant\scripts\install-bginfo.ps1
-  }
 }

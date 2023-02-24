@@ -16,7 +16,7 @@ if ((gwmi win32_computersystem).partofdomain -eq $false) {
   $PlainPassword = "vagrant" # "P@ssw0rd"
   $SecurePassword = $PlainPassword | ConvertTo-SecureString -AsPlainText -Force
 
-  # Windows Server 2012 R2
+  # Windows Server 2022 
   Install-WindowsFeature AD-domain-services
   Import-Module ADDSDeployment
   Install-ADDSForest `
@@ -33,7 +33,7 @@ if ((gwmi win32_computersystem).partofdomain -eq $false) {
     -SysvolPath "C:\Windows\SYSVOL" `
     -Force:$true
 
-  $newDNSServers = "8.8.8.8", "4.4.4.4"
-  $adapters = Get-WmiObject Win32_NetworkAdapterConfiguration | Where-Object {$_.IPAddress -eq "10.0.2.15"}
-  $adapters | ForEach-Object {$_.SetDNSServerSearchOrder($newDNSServers)}
+ $newDNSServers = "8.8.8.8", "4.4.4.4"
+ $adapters = Get-WmiObject Win32_NetworkAdapterConfiguration | Where-Object {$_.IPAddress -eq "10.0.2.15"}
+ $adapters | ForEach-Object {$_.SetDNSServerSearchOrder($newDNSServers)}
 }

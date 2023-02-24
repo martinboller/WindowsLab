@@ -9,7 +9,7 @@ if ($env:COMPUTERNAME -imatch 'dc1') {
       -ZoneName $domain `
       -IPv4Address 192.168.10.44
       Add-DnsServerResourceRecordA `
-      -Name win10a `
+      -Name win10b `
       -ZoneName $domain `
       -IPv4Address 192.168.10.45
       Add-DnsServerResourceRecordA `

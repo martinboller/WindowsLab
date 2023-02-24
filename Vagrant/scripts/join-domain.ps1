@@ -5,7 +5,7 @@ $domain= "siemlab.dk"
 
 Write-Host 'Join the domain'
 $hostname = $(hostname)
-$user = "SIEMLAB\vagrant"
+$user = "administrator@$domain"
 $pass = ConvertTo-SecureString "vagrant" -AsPlainText -Force
 $DomainCred = New-Object System.Management.Automation.PSCredential $user, $pass
 
@@ -19,7 +19,7 @@ If ($hostname -eq "wef") {
   Write-Host "Adding Win10b to the domain. Sometimes this step times out. If that happens, just run 'vagrant reload win10b --provision'" #debug
   Add-Computer -DomainName "siemlab.dk" -credential $DomainCred -OUPath "ou=Jumpstations,DC=siemlab,dc=dk"
 } Else {
-  Add-Computer -DomainName "siemlab.dk" -credential $DomainCred -PassThru -OUPath "ou=Servers,DC=siemlab,dc=dk"
+  Add-Computer -DomainName "siemlab.dk" -credential $DomainCred -OUPath "ou=Servers,DC=siemlab,dc=dk"
 }
 
 Set-ItemProperty "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon" -Name AutoAdminLogon -Value 1
