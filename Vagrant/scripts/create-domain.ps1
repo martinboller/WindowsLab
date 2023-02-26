@@ -51,6 +51,7 @@ if ((gwmi win32_computersystem).partofdomain -eq $false) {
   Write-Host "Excluding all interfaces but the public IPv from DNS Server listening"
   $DnsServerSettings=Get-DnsServerSetting -ALL
   $DnsServerSettings.ListeningIpAddress=@($ip)
+  $DnsServerSettings.EnableIPv6=$false
   Set-DNSServerSetting $DnsServerSettings
 
   
@@ -75,6 +76,7 @@ $RRName = "dc1","@"
   }
 
 . C:\vagrant\scripts\fix-defaultgw.ps1
+
 Restart-Service DNS
   
 }

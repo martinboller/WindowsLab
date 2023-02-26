@@ -66,17 +66,17 @@ if ((gwmi win32_computersystem).partofdomain -eq $false) {
   Write-Host "Excluding all interfaces but the public IPv from DNS Server listening"
   $DnsServerSettings=Get-DnsServerSetting -ALL
   $DnsServerSettings.ListeningIpAddress=@($ip)
+  $DnsServerSettings.EnableIPv6=$false
   Set-DNSServerSetting $DnsServerSettings
 
   Write-Host "Syncing DNS"
   Sync-DnsServerZone -passThru -ErrorAction SilentlyContinue
         
   Restart-Service DNS
-  Start-Sleep -Seconds 120
+  Start-Sleep -Seconds 10
   
   . C:\vagrant\scripts\fix-defaultgw.ps1
   
   Restart-Service DNS
   
 Start-Sleep -s 30
-#exit 0

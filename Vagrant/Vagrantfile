@@ -42,8 +42,8 @@ Vagrant.configure("2") do |config|
     cfg.vm.provision "shell", path: "resources/AD-org/create_users.ps1", privileged: false
     cfg.vm.provision "shell", path: "resources/AD-org/create_computers.ps1", privileged: false
     cfg.vm.provision "shell", path: "scripts/fix-defaultgw.ps1", privileged: false
-    cfg.vm.provision "reload"
     cfg.vm.provision "shell", path: "scripts/fix-dnslocalnet.ps1", privileged: false
+
     cfg.vm.provision "reload"
   
     cfg.vm.provider "vmware_fusion" do |v, override|
@@ -88,6 +88,7 @@ Vagrant.configure("2") do |config|
     cfg.vm.provision "shell", path: "scripts/provision.ps1", privileged: true
     cfg.vm.provision "shell", inline: "Set-SmbServerConfiguration -AuditSmb1Access $true -Force", privileged: false
     cfg.vm.provision "shell", path: "scripts/fix-defaultgw.ps1", privileged: false
+
     cfg.vm.provision "reload"
 
     cfg.vm.provider "vmware_fusion" do |v, override|
@@ -137,6 +138,7 @@ Vagrant.configure("2") do |config|
     cfg.vm.provision "shell", path: "scripts/install-autorunstowineventlog.ps1", privileged: false
     cfg.vm.provision "shell", inline: "Set-SmbServerConfiguration -AuditSmb1Access $true -Force", privileged: false
     cfg.vm.provision "shell", path: "scripts/fix-defaultgw.ps1", privileged: false
+
     cfg.vm.provision "reload"
 
     cfg.vm.provider "vmware_fusion" do |v, override|
@@ -183,6 +185,8 @@ Vagrant.configure("2") do |config|
     cfg.vm.provision "shell", path: "scripts/install-sysinternals.ps1", privileged: false
     cfg.vm.provision "shell", path: "scripts/install-autorunstowineventlog.ps1", privileged: false
     cfg.vm.provision "shell", path: "scripts/fix-defaultgw.ps1", privileged: false
+    cfg.vm.provision "shell", path: "scripts/rearm-windows.ps1", privileged: false
+
     cfg.vm.provision "reload"
 
     cfg.vm.provider "vmware_fusion" do |v, override|
@@ -232,6 +236,8 @@ Vagrant.configure("2") do |config|
     cfg.vm.provision "shell", path: "scripts/install-sysinternals.ps1", privileged: false
     cfg.vm.provision "shell", path: "scripts/install-autorunstowineventlog.ps1", privileged: false
     cfg.vm.provision "shell", path: "scripts/fix-defaultgw.ps1", privileged: false
+    cfg.vm.provision "shell", path: "scripts/rearm-windows.ps1", privileged: false
+
     cfg.vm.provision "reload"
 
     cfg.vm.provider "vmware_fusion" do |v, override|
@@ -281,6 +287,8 @@ Vagrant.configure("2") do |config|
     cfg.vm.provision "shell", path: "scripts/install-sysinternals.ps1", privileged: false
     cfg.vm.provision "shell", path: "scripts/install-autorunstowineventlog.ps1", privileged: false
     cfg.vm.provision "shell", path: "scripts/fix-defaultgw.ps1", privileged: false
+    cfg.vm.provision "shell", path: "scripts/rearm-windows.ps1", privileged: false
+
     cfg.vm.provision "reload"
 
     cfg.vm.provider "vmware_fusion" do |v, override|

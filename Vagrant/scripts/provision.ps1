@@ -12,9 +12,6 @@ if ($env:COMPUTERNAME -imatch 'vagrant') {
 
   Write-Host 'Hostname is still the original one, skip provisioning for reboot'
 
-  #Write-Host 'Install bginfo'
-  #. c:\vagrant\scripts\install-bginfo.ps1
-
   Write-Host -fore red 'Hint: vagrant reload' $box '--provision'
 
 } elseif ((gwmi win32_computersystem).partofdomain -eq $false) {
@@ -35,6 +32,9 @@ if ($env:COMPUTERNAME -imatch 'vagrant') {
 } else {
 
   Write-Host -fore green "I am domain joined!"
-  . C:\vagrant\scripts\fix-defaultgw.ps1
 
 }
+
+
+Write-Host 'Set default gateway and remove 10.* network from registering dns'
+. C:\vagrant\scripts\fix-defaultgw.ps1
