@@ -63,11 +63,10 @@ if ((gwmi win32_computersystem).partofdomain -eq $false) {
     Set-DnsServerForwarder -IPAddress $InternalDns -PassThru
   }
 
-  Write-Host "Excluding NAT interface from DNS"
-  $nics=Get-WmiObject "Win32_NetworkAdapterConfiguration where IPEnabled='TRUE'" |? { $_.IPAddress[0] -ilike "10.*" }
-  $dnslistenip=$nics.IPAddress
-  $dnslistenip
-  dnscmd /ResetListenAddresses  $dnslistenip "192.168.10.42"
+  Write-Host "Excluding all interfaces but the public IPv from DNS Server listening"
+  $DnsServerSettings=Get-DnsServerSetting -ALL
+  $DnsServerSettings.ListeningIpAddress=@($ip)
+  Set-DNSServerSetting $DnsServerSettings
 
   Write-Host "Syncing DNS"
   Sync-DnsServerZone -passThru -ErrorAction SilentlyContinue

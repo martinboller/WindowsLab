@@ -45,24 +45,14 @@ if ((gwmi win32_computersystem).partofdomain -eq $false) {
     -SysvolPath "C:\Windows\SYSVOL" `
     -Force:$true
 
-#    $newDNSServers = "192.168.10.41", "192.168.10.42"
-#    $gw = "192.168.10.1"
-#      $adapters = Get-WmiObject Win32_NetworkAdapterConfiguration | Where-Object { $_.IPAddress -And ($_.IPAddress).StartsWith($subnet) }
-#      if ($adapters) {
-#        Write-Host Setting DNS
-#        $adapters | ForEach-Object {$_.SetDNSServerSearchOrder($newDNSServers)}
-#        Write-Host Setting Gateway
-#        $adapters | ForEach-Object {$_.SetGateways($gw)}
-#      }
-
   Write-Host "Setting timezone to UTC"
   c:\windows\system32\tzutil.exe /s "UTC"
   
-  Write-Host "Excluding NAT interface from DNS"
-  $nics=Get-WmiObject "Win32_NetworkAdapterConfiguration where IPEnabled='TRUE'" |? { $_.IPAddress[0] -ilike "10.*" }
-  $dnslistenip=$nics.IPAddress
-  $dnslistenip
-  dnscmd /ResetListenAddresses  $dnslistenip "192.168.10.41"
+  Write-Host "Excluding all interfaces but the public IPv from DNS Server listening"
+  $DnsServerSettings=Get-DnsServerSetting -ALL
+  $DnsServerSettings.ListeningIpAddress=@($ip)
+  Set-DNSServerSetting $DnsServerSettings
+
   
   $nics=Get-WmiObject "Win32_NetworkAdapterConfiguration where IPEnabled='TRUE'" |? { $_.IPAddress[0] -ilike "10.*" }
   foreach($nic in $nics)
@@ -70,10 +60,6 @@ if ((gwmi win32_computersystem).partofdomain -eq $false) {
     $nic.DomainDNSRegistrationEnabled = $false
     $nic.SetDynamicDNSRegistration($false) |Out-Null
     }
-
-  #Get-DnsServerResourceRecord -ZoneName $domain -type 1 -Name "@" | Select-Object HostName,RecordType -ExpandProperty RecordData | Where-Object {$_.IPv4Address -ilike "10.*"}|Remove-DnsServerResourceRecord
- 
-  #$RRs= Get-DnsServerResourceRecord -ZoneName $domain -type 1 -Name "@"
 
 $RRName = "dc1","@"
   foreach($hostname in $RRName)
@@ -89,7 +75,7 @@ $RRName = "dc1","@"
   }
 
 . C:\vagrant\scripts\fix-defaultgw.ps1
-#Restart-Service DNS
+Restart-Service DNS
   
 }
 Start-Sleep -s 30

@@ -1,7 +1,7 @@
 $domain = "siemlab.dk"
 
-Sync-DnsServerZone -Name $domain -Verbose -ErrorAction Ignore
-Get-DnsServerZone -Name $domain -Verbose -ErrorAction Ignore
+Sync-DnsServerZone -Name $domain -Verbose -ErrorAction SilentlyContinue
+Get-DnsServerZone -Name $domain -Verbose -ErrorAction SilentlyContinue
 
     # Remove any 10.* registrations from DNS for domain and DC's
 
