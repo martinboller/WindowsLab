@@ -64,6 +64,7 @@ if ((gwmi win32_computersystem).partofdomain -eq $false) {
   }
 
   Write-Host "Excluding all interfaces but the public IPv from DNS Server listening"
+  # Apparently need to pull the config as a class, change the settings, then set "everything" back
   $DnsServerSettings=Get-DnsServerSetting -ALL
   $DnsServerSettings.ListeningIpAddress=@($ip)
   $DnsServerSettings.EnableIPv6=$false
