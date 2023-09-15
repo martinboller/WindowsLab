@@ -21,20 +21,21 @@ if ($env:COMPUTERNAME -imatch 'vagrant') {
   if ($env:COMPUTERNAME -imatch 'dc1') {
     Write-Host 'Install DC1 and create Domain'
     . c:\vagrant\scripts\create-domain.ps1 192.168.10.41
-  } elseif ($env:COMPUTERNAME -imatch 'dc2') {
-    Write-Host 'Install DC2'
-    . c:\vagrant\scripts\add-domaincontroller.ps1 192.168.10.42
-  } else {
-    . c:\vagrant\scripts\join-domain.ps1
-  }
+    Write-Host 'Set default gateway and remove 10.* network from registering dns'
+    . C:\vagrant\scripts\fix-defaultgw.ps1
+    } elseif ($env:COMPUTERNAME -imatch 'dc2') {
+        Write-Host 'Install DC2'
+      . c:\vagrant\scripts\add-domaincontroller.ps1 192.168.10.42
+        Write-Host 'Set default gateway and remove 10.* network from registering dns'
+      . C:\vagrant\scripts\fix-defaultgw.ps1
+    } else {
+        . c:\vagrant\scripts\join-domain.ps1
+        Write-Host 'Set default gateway and remove 10.* network from registering dns'
+    . C:\vagrant\scripts\fix-defaultgw.ps1
+    }
+
   Write-Host -fore red 'Hint: vagrant reload' $box '--provision'
 
 } else {
-
   Write-Host -fore green "I am domain joined!"
-
 }
-
-
-Write-Host 'Set default gateway and remove 10.* network from registering dns'
-. C:\vagrant\scripts\fix-defaultgw.ps1

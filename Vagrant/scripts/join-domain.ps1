@@ -18,7 +18,10 @@ If ($hostname -eq "wef") {
 } ElseIf ($hostname -eq "win10b") {
   Write-Host "Adding Win10b to the domain. Sometimes this step times out. If that happens, just run 'vagrant reload win10b --provision'" #debug
   Add-Computer -DomainName "siemlab.dk" -credential $DomainCred -OUPath "ou=Jumpstations,DC=siemlab,dc=dk"
-} Else {
+} ElseIf ($hostname -eq "nsa") {
+  Write-Host "Adding server NSA to the domain. Sometimes this step times out. If that happens, just run 'vagrant reload nsa --provision'" #debug
+  Add-Computer -DomainName "siemlab.dk" -credential $DomainCred -OUPath "OU=Security,OU=SIEMLab Servers,DC=siemlab, DC=dk"
+}Else {
   Add-Computer -DomainName "siemlab.dk" -credential $DomainCred -OUPath "ou=Servers,DC=siemlab,dc=dk"
 }
 

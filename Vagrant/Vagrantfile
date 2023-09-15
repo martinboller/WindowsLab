@@ -22,6 +22,7 @@ Vagrant.configure("2") do |config|
     cfg.vm.provision "shell", path: "scripts/provision.ps1", privileged: false
     cfg.vm.provision "reload"
     cfg.vm.provision "shell", path: "scripts/provision.ps1", privileged: false
+    #cfg.vm.provision "shell", path: "scripts/install-winget.ps1", privileged: true
     cfg.vm.provision "reload"
     cfg.vm.provision "shell", path: "scripts/add-NS-records.ps1", privileged: false
     cfg.vm.provision "shell", path: "scripts/install-CA.ps1", privileged: false
@@ -35,6 +36,7 @@ Vagrant.configure("2") do |config|
     cfg.vm.provision "shell", path: "scripts/configure-AuditingPolicyGPOs.ps1", privileged: false
     cfg.vm.provision "shell", inline: "Set-SmbServerConfiguration -AuditSmb1Access $true -Force", privileged: false
     cfg.vm.provision "shell", path: "scripts/configure-CA-gpo.ps1", privileged: false
+    cfg.vm.provision "shell", path: "scripts/install-utilities.ps1", privileged: false
   #  cfg.vm.provision "shell", path: "scripts/install-CA.ps1", privileged: false
     cfg.vm.provision "shell", path: "scripts/set-ntp.cmd", privileged: false
     cfg.vm.provision "shell", path: "resources/AD-org/create_ous.ps1", privileged: false
@@ -86,8 +88,11 @@ Vagrant.configure("2") do |config|
     cfg.vm.provision "shell", path: "scripts/provision.ps1", privileged: true
     cfg.vm.provision "reload"
     cfg.vm.provision "shell", path: "scripts/provision.ps1", privileged: true
+    #cfg.vm.provision "shell", path: "scripts/install-winget.ps1", privileged: true
+    cfg.vm.provision "reload"
     cfg.vm.provision "shell", inline: "Set-SmbServerConfiguration -AuditSmb1Access $true -Force", privileged: false
     cfg.vm.provision "shell", path: "scripts/fix-defaultgw.ps1", privileged: false
+    cfg.vm.provision "shell", path: "scripts/install-utilities.ps1", privileged: false
 
     cfg.vm.provision "reload"
 
@@ -112,33 +117,41 @@ Vagrant.configure("2") do |config|
   config.vm.define "wef" do |cfg|
     cfg.vm.box = "../Boxes/windows_2022_virtualbox.box"
     cfg.vm.hostname = "wef"
+    # use the plaintext WinRM transport and force it to use basic authentication.
+    # NB this is needed because the default negotiate transport stops working
+    #    after the domain controller is installed.
+    #    see https://groups.google.com/forum/#!topic/vagrant-up/sZantuCM0q4
+    cfg.winrm.transport = :plaintext
+    cfg.winrm.basic_auth_only = true
 
     cfg.vm.boot_timeout = 600
     cfg.vm.communicator = "winrm"
     cfg.winrm.timeout = 240
     cfg.winrm.retry_limit = 20
-#    cfg.vm.network :private_network, ip: "192.168.10.43", dns: "192.168.10.41 192.168.10.42" #, gateway: "192.168.10.1"
+    cfg.vm.network :private_network, ip: "192.168.10.43", dns: "192.168.10.41 192.168.10.42" #, gateway: "192.168.10.1"
     cfg.vm.network :public_network, ip: "192.168.10.43", dns: "192.168.10.41 192.168.10.42", gateway: "192.168.10.1", bridge: "enp1s0", auto_config: true
 
-#    cfg.vm.provision "shell", path: "scripts/fix-second-network.ps1", privileged: false, args: "-ip 192.168.10.43 -dns 192.168.10.41"
+    cfg.vm.provision "shell", path: "scripts/fix-second-network.ps1", privileged: false, args: "-ip 192.168.10.43 -dns 192.168.10.41"
     cfg.vm.provision "shell", path: "scripts/provision.ps1", privileged: false
     cfg.vm.provision "reload"
     cfg.vm.provision "shell", path: "scripts/provision.ps1", privileged: false
+    #cfg.vm.provision "shell", path: "scripts/install-winget.ps1", privileged: true
+    cfg.vm.provision "reload"
     cfg.vm.provision "shell", path: "scripts/download_palantir_wef.ps1", privileged: false
     cfg.vm.provision "shell", path: "scripts/download_palantir_osquery.ps1", privileged: false
     cfg.vm.provision "shell", path: "scripts/install-wefsubscriptions.ps1", privileged: false
+#    cfg.vm.provision "shell", path: "scripts/install-winlogbeat.ps1", privileged: true
 #    cfg.vm.provision "shell", path: "scripts/install-splunkuf.ps1", privileged: false
 #    cfg.vm.provision "shell", path: "scripts/install-windows_ta.ps1", privileged: false
-#    cfg.vm.provision "shell", path: "scripts/install-utilities-wef.ps1", privileged: false
+    cfg.vm.provision "shell", path: "scripts/install-utilities.ps1", privileged: true
 #    cfg.vm.provision "shell", path: "scripts/install-osquery.ps1", privileged: false
 #    cfg.vm.provision "shell", path: "scripts/install-caldera-agent.ps1", privileged: false
 #    cfg.vm.provision "shell", path: "scripts/install-inputsconf.ps1", privileged: false
     cfg.vm.provision "shell", path: "scripts/install-sysinternals.ps1", privileged: false
     cfg.vm.provision "shell", path: "scripts/configure-pslogstranscriptsshare.ps1", privileged: false
-    cfg.vm.provision "shell", path: "scripts/install-autorunstowineventlog.ps1", privileged: false
     cfg.vm.provision "shell", inline: "Set-SmbServerConfiguration -AuditSmb1Access $true -Force", privileged: false
     cfg.vm.provision "shell", path: "scripts/fix-defaultgw.ps1", privileged: false
-
+    cfg.vm.provision "shell", path: "scripts/install-utilities.ps1", privileged: true
     cfg.vm.provision "reload"
 
     cfg.vm.provider "vmware_fusion" do |v, override|
@@ -157,11 +170,65 @@ Vagrant.configure("2") do |config|
       vb.customize ["setextradata", "global", "GUI/SuppressMessages", "all" ]
     end
   end
+  
+     ## "Top Secret" Server "nsa"
+  config.vm.define "nsa" do |cfg|
+    cfg.vm.box = "../Boxes/windows_2022_virtualbox.box"
+    cfg.vm.hostname = "nsa"
+    # use the plaintext WinRM transport and force it to use basic authentication.
+    # NB this is needed because the default negotiate transport stops working
+    #    after the domain controller is installed.
+    #    see https://groups.google.com/forum/#!topic/vagrant-up/sZantuCM0q4
+    cfg.winrm.transport = :plaintext
+    cfg.winrm.basic_auth_only = true
+
+    cfg.vm.boot_timeout = 600
+    cfg.vm.communicator = "winrm"
+    cfg.winrm.timeout = 240
+    cfg.winrm.retry_limit = 20
+#    cfg.vm.network :private_network, ip: "192.168.10.43", dns: "192.168.10.41 192.168.10.42" #, gateway: "192.168.10.1"
+    cfg.vm.network :public_network, ip: "192.168.10.48", dns: "192.168.10.41 192.168.10.42", gateway: "192.168.10.1", bridge: "enp1s0", auto_config: true
+
+#    cfg.vm.provision "shell", path: "scripts/fix-second-network.ps1", privileged: false, args: "-ip 192.168.10.43 -dns 192.168.10.41"
+    cfg.vm.provision "shell", path: "scripts/provision.ps1", privileged: false
+    cfg.vm.provision "reload"
+    cfg.vm.provision "shell", path: "scripts/provision.ps1", privileged: false
+    #cfg.vm.provision "shell", path: "scripts/install-winget.ps1", privileged: true
+    cfg.vm.provision "reload"
+    cfg.vm.provision "shell", path: "scripts/install-sysinternals.ps1", privileged: false
+    cfg.vm.provision "shell", inline: "Set-SmbServerConfiguration -AuditSmb1Access $true -Force", privileged: false
+    cfg.vm.provision "shell", path: "scripts/fix-defaultgw.ps1", privileged: false
+    cfg.vm.provision "shell", path: "scripts/install-utilities.ps1", privileged: false
+
+    cfg.vm.provision "reload"
+
+    cfg.vm.provider "vmware_fusion" do |v, override|
+      override.vm.box = "../Boxes/windows_2019_vmware.box"
+      v.memory = 2048
+      v.cpus = 1
+      v.gui = false
+    end
+
+    cfg.vm.provider "virtualbox" do |vb, override|
+      vb.gui = false
+      vb.customize ["modifyvm", :id, "--memory", 2048]
+      vb.customize ["modifyvm", :id, "--cpus", 2]
+      vb.customize ["modifyvm", :id, "--vram", "32"]
+      vb.customize ["modifyvm", :id, "--clipboard", "bidirectional"]
+      vb.customize ["setextradata", "global", "GUI/SuppressMessages", "all" ]
+    end
+  end
 
   ## Windows 10 Workstation
   config.vm.define "win10a" do |cfg|
     cfg.vm.box = "../Boxes/windows_10_virtualbox.box"
     cfg.vm.hostname = "win10a"
+    # use the plaintext WinRM transport and force it to use basic authentication.
+    # NB this is needed because the default negotiate transport stops working
+    #    after the domain controller is installed.
+    #    see https://groups.google.com/forum/#!topic/vagrant-up/sZantuCM0q4
+    cfg.winrm.transport = :plaintext
+    cfg.winrm.basic_auth_only = true
 
     cfg.vm.boot_timeout = 600
     cfg.vm.communicator = "winrm"
@@ -175,8 +242,11 @@ Vagrant.configure("2") do |config|
     cfg.vm.provision "shell", path: "scripts/provision.ps1", privileged: false
     cfg.vm.provision "reload"
     cfg.vm.provision "shell", path: "scripts/provision.ps1", privileged: false
+    #cfg.vm.provision "shell", path: "scripts/install-winget.ps1", privileged: true
+    cfg.vm.provision "reload"
     cfg.vm.provision "shell", path: "scripts/download_palantir_wef.ps1", privileged: false
     cfg.vm.provision "shell", path: "scripts/download_palantir_osquery.ps1", privileged: false
+    cfg.vm.provision "shell", path: "scripts/install-utilities.ps1", privileged: false
 #    cfg.vm.provision "shell", path: "scripts/install-winlogbeat.ps1", privileged: false
 #    cfg.vm.provision "shell", path: "scripts/install-utilities.ps1", privileged: false
 #    cfg.vm.provision "shell", path: "scripts/install-osquery.ps1", privileged: false
@@ -226,10 +296,12 @@ Vagrant.configure("2") do |config|
     cfg.vm.provision "shell", path: "scripts/provision.ps1", privileged: false
     cfg.vm.provision "reload"
     cfg.vm.provision "shell", path: "scripts/provision.ps1", privileged: false
+    #cfg.vm.provision "shell", path: "scripts/install-winget.ps1", privileged: true
+    cfg.vm.provision "reload"
     cfg.vm.provision "shell", path: "scripts/download_palantir_wef.ps1", privileged: false
     cfg.vm.provision "shell", path: "scripts/download_palantir_osquery.ps1", privileged: false
+    cfg.vm.provision "shell", path: "scripts/install-utilities.ps1", privileged: false
 #    cfg.vm.provision "shell", path: "scripts/install-winlogbeat.ps1", privileged: false
-#    cfg.vm.provision "shell", path: "scripts/install-utilities.ps1", privileged: false
 #    cfg.vm.provision "shell", path: "scripts/install-osquery.ps1", privileged: false
 #    cfg.vm.provision "shell", path: "scripts/install-caldera-agent.ps1", privileged: false
 #    cfg.vm.provision "shell", path: "scripts/install-inputsconf.ps1", privileged: false
@@ -237,8 +309,8 @@ Vagrant.configure("2") do |config|
     cfg.vm.provision "shell", path: "scripts/install-autorunstowineventlog.ps1", privileged: false
     cfg.vm.provision "shell", path: "scripts/fix-defaultgw.ps1", privileged: false
     cfg.vm.provision "shell", path: "scripts/rearm-windows.ps1", privileged: false
-
     cfg.vm.provision "reload"
+    cfg.vm.provision "shell", path: "scripts/install-utilities.ps1", privileged: false
 
     cfg.vm.provider "vmware_fusion" do |v, override|
       override.vm.box = "../Boxes/windows_10_vmware.box"
@@ -264,6 +336,12 @@ Vagrant.configure("2") do |config|
   config.vm.define "win11" do |cfg|
     cfg.vm.box = "../Boxes/windows_11_virtualbox.box"
     cfg.vm.hostname = "win11"
+    # use the plaintext WinRM transport and force it to use basic authentication.
+    # NB this is needed because the default negotiate transport stops working
+    #    after the domain controller is installed.
+    #    see https://groups.google.com/forum/#!topic/vagrant-up/sZantuCM0q4
+    cfg.winrm.transport = :plaintext
+    cfg.winrm.basic_auth_only = true
 
     cfg.vm.boot_timeout = 600
     cfg.vm.communicator = "winrm"
@@ -277,10 +355,11 @@ Vagrant.configure("2") do |config|
     cfg.vm.provision "shell", path: "scripts/provision.ps1", privileged: false
     cfg.vm.provision "reload"
     cfg.vm.provision "shell", path: "scripts/provision.ps1", privileged: false
+    cfg.vm.provision "reload"
     cfg.vm.provision "shell", path: "scripts/download_palantir_wef.ps1", privileged: false
     cfg.vm.provision "shell", path: "scripts/download_palantir_osquery.ps1", privileged: false
 #    cfg.vm.provision "shell", path: "scripts/install-splunkuf.ps1", privileged: false
-#    cfg.vm.provision "shell", path: "scripts/install-utilities.ps1", privileged: false
+    cfg.vm.provision "shell", path: "scripts/install-utilities.ps1", privileged: false
 #    cfg.vm.provision "shell", path: "scripts/install-osquery.ps1", privileged: false
 #    cfg.vm.provision "shell", path: "scripts/install-caldera-agent.ps1", privileged: false
 #    cfg.vm.provision "shell", path: "scripts/install-inputsconf.ps1", privileged: false

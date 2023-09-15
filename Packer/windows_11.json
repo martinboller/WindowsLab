@@ -127,9 +127,9 @@
   "variables": {
     "autounattend": "./answer_files/11/Autounattend.xml",
     "disk_size": "61440",
-    "iso_checksum": "684bc16adbd792ef2f7810158a3f387f23bf95e1aee5f16270c5b7f56db753b6",
+    "iso_checksum": "ebbc79106715f44f5020f77bd90721b17c5a877cbc15a3535b99155493a1bb3f",
     "iso_checksum_type": "sha256",
-    "iso_url": "https://software-download.microsoft.com/download/sg/888969d5-f34g-4e03-ac9d-1f9786c66749/22000.318.211104-1236.co_release_svc_refresh_CLIENTENTERPRISEEVAL_OEMRET_x64FRE_en-us.iso"
+    "iso_url": "https://software-static.download.prss.microsoft.com/dbazure/988969d5-f34g-4e03-ac9d-1f9786c66751/22621.525.220925-0207.ni_release_svc_refresh_CLIENTENTERPRISEEVAL_OEMRET_x64FRE_en-us.iso"
   }
 }
 
