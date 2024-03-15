@@ -9,6 +9,8 @@ Testing & Hacking Windows.
 
 ## Known Issues
 - Running Virtualbox on Debian, so this is what is tested here.
+- To get all plugins installed, start with 
+    $ packer init windows_2022.pkr.hcl
 
 ## Build boxes
 $ packer build --only=[vmware|virtualbox]-iso.* windows_*xxxx*.pkr.hcl
