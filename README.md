@@ -11,15 +11,20 @@ Testing & Hacking Windows.
 - Running Virtualbox on Debian, so this is what is tested here.
 
 ## Build boxes
-$ packer build --only=[vmware|virtualbox]-iso windows_10.json
-$ packer build --only=[vmware|virtualbox]-iso windows_2016.json
-$ packer build --only=[vmware|virtualbox]-iso windows_2022.json
+$ packer build --only=[vmware|virtualbox]-iso.* windows_*xxxx*.pkr.hcl
 
 ### Virtualbox examples
-$ packer build --only=virtualbox-iso windows_2022.json
-$ packer build --only=virtualbox-iso windows_10.json
-$ packer build --only=virtualbox-iso windows_11.json
-Note: Windows 11 requirements not meet on test system so currently not tested
+$ packer build --only=virtualbox-iso.* windows_2022.pkr.hcl
+
+$ packer build --only=virtualbox-iso.* windows_2019.pkr.hcl
+
+$ packer build --only=virtualbox-iso.* windows_2016.pkr.hcl
+
+$ packer build --only=virtualbox-iso.* windows_10.pkr.hcl
+
+$ packer build --only=virtualbox-iso.* windows_11.pkr.hcl
+
+Note: Windows 11 requirements not met on test system so currently not tested
 
 Move the boxes created to ..\Boxes\
 
