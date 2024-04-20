@@ -15,7 +15,7 @@ else
 }
 $OU = "ou=Servers,DC=siemlab,dc=dk" 
 $gPLinks = $null
-$gPLinks = Get-ADOrganizationalUnit -Identity $OU -Properties name,distinguishedName, gPLink, gPOptions
+$gPLinks = Get-ADOrganizationalUnit -Filter 'Name -like $OU' -Properties name,distinguishedName, gPLink, gPOptions
 $GPO = Get-GPO -Name 'Powershell Logging'
 If ($gPLinks.LinkedGroupPolicyObjects -notcontains $gpo.path)
 {
@@ -27,7 +27,7 @@ else
 }
 $OU = "ou=Domain Controllers,DC=siemlab,dc=dk"
 $gPLinks = $null
-$gPLinks = Get-ADOrganizationalUnit -Identity $OU -Properties name,distinguishedName, gPLink, gPOptions
+$gPLinks = Get-ADOrganizationalUnit -Filter 'Name -like $OU' -Properties name,distinguishedName, gPLink, gPOptions
 If ($gPLinks.LinkedGroupPolicyObjects -notcontains $gpo.path)
 {
     New-GPLink -Name 'Powershell Logging' -Target $OU -Enforced yes
