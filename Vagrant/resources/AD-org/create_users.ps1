@@ -47,7 +47,7 @@ foreach ($User in $Users) {
             EmailAddress               = $User.Email
             AccountPassword            = (ConvertTo-SecureString $User.Password -AsPlainText -Force) 
             Enabled                    = $true
-            ChangePasswordAtLogon      = $true
+            ChangePasswordAtLogon      = $false
         }   #end userprops   
 
          New-ADUser @userProps
