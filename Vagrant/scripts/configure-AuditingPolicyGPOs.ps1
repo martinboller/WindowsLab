@@ -52,7 +52,7 @@ $GPOName = 'VulnScan Group Policy Object'
 $OU = "DC=siemlab,dc=dk"
 $DOMAIN = "siemlab.dk"
 Write-Host "Importing $GPOName..."
-Import-GPO -BackupGpoName $GPOName -Path "c:\vagrant\resources\GPO\vuln_scan" -TargetName $GPOName -CreateIfNeeded
+Import-GPO -BackupGpoName $GPOName -Path "c:\vagrant\resources\GPO\vuln_scan" -MigrationTable "c:\vagrant\resources\GPO\vuln_scan\vulnscan.migtable"  -TargetName $GPOName -CreateIfNeeded
 $gpLinks = $null
 $gPLinks = Get-ADOrganizationalUnit -Filter 'Name -like $OU' -Properties name,distinguishedName, gPLink, gPOptions
 $GPO = Get-GPO -Name $GPOName
