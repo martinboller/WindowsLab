@@ -40,7 +40,7 @@ $sysmonConfigPath = "$sysmonDir\sysmonConfig.xml"
 # Write-Host "Downloading Tcpview.exe..."
 # (New-Object System.Net.WebClient).DownloadFile('https://live.sysinternals.com/Tcpview.exe', $tcpviewPath)
 # Copy-Item $sysmonPath $sysmonDir
-$outputdir = 'C:\tools\sysinternals'
+$outputdir = 'C:\Tools\Sysinternals'
 $url       = 'https://live.sysinternals.com/'
 
 $WebResponse = Invoke-WebRequest -UseBasicParsing -Uri $url
