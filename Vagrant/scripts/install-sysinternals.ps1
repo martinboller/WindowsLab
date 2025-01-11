@@ -27,19 +27,30 @@ $sysmonConfigPath = "$sysmonDir\sysmonConfig.xml"
 
 # Microsoft likes TLSv1.2 as well
 [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
-Write-Host "Downloading Autoruns64.exe..."
-(New-Object System.Net.WebClient).DownloadFile('https://live.sysinternals.com/Autoruns64.exe', $autorunsPath)
-Write-Host "Downloading Procmon.exe..."
-(New-Object System.Net.WebClient).DownloadFile('https://live.sysinternals.com/Procmon.exe', $procmonPath)
-Write-Host "Downloading PsExec64.exe..."
-(New-Object System.Net.WebClient).DownloadFile('https://live.sysinternals.com/PsExec64.exe', $psexecPath)
-Write-Host "Downloading procexp64.exe..."
-(New-Object System.Net.WebClient).DownloadFile('https://live.sysinternals.com/procexp64.exe', $procexpPath)
-Write-Host "Downloading Sysmon64.exe..."
-(New-Object System.Net.WebClient).DownloadFile('https://live.sysinternals.com/Sysmon64.exe', $sysmonPath)
-Write-Host "Downloading Tcpview.exe..."
-(New-Object System.Net.WebClient).DownloadFile('https://live.sysinternals.com/Tcpview.exe', $tcpviewPath)
-Copy-Item $sysmonPath $sysmonDir
+# Write-Host "Downloading Autoruns64.exe..."
+# (New-Object System.Net.WebClient).DownloadFile('https://live.sysinternals.com/Autoruns64.exe', $autorunsPath)
+# Write-Host "Downloading Procmon.exe..."
+# (New-Object System.Net.WebClient).DownloadFile('https://live.sysinternals.com/Procmon.exe', $procmonPath)
+# Write-Host "Downloading PsExec64.exe..."
+# (New-Object System.Net.WebClient).DownloadFile('https://live.sysinternals.com/PsExec64.exe', $psexecPath)
+# Write-Host "Downloading procexp64.exe..."
+# (New-Object System.Net.WebClient).DownloadFile('https://live.sysinternals.com/procexp64.exe', $procexpPath)
+# Write-Host "Downloading Sysmon64.exe..."
+# (New-Object System.Net.WebClient).DownloadFile('https://live.sysinternals.com/Sysmon64.exe', $sysmonPath)
+# Write-Host "Downloading Tcpview.exe..."
+# (New-Object System.Net.WebClient).DownloadFile('https://live.sysinternals.com/Tcpview.exe', $tcpviewPath)
+# Copy-Item $sysmonPath $sysmonDir
+$outputdir = 'C:\tools\sysinternals'
+$url       = 'https://live.sysinternals.com/'
+
+$WebResponse = Invoke-WebRequest -UseBasicParsing -Uri $url
+# get the list of links, skip the first one ("../") and download the files
+$WebResponse.Links | Select-Object -ExpandProperty href -Skip 1 | ForEach-Object {
+    Write-Host "Downloading file '$_'"
+    $filePath = Join-Path -Path $outputdir -ChildPath $_
+    $fileUrl  = '{0}/{1}' -f $url.TrimEnd('/'), $_
+    Invoke-WebRequest -Uri $fileUrl -OutFile $filePath
+}
 
 # Download Olaf Hartongs Sysmon config
 Write-Host "Downloading Olaf Hartong's Sysmon config..."
